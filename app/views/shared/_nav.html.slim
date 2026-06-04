@@ -1,0 +1,18 @@
+= turbo_stream_from "user_#{Current.user.id}_nav"
+nav.fixed.top-0.inset-x-0.z-40.bg-white.border-b.border-gray-200
+  .mx-auto.max-w-5xl.px-4.h-14.flex.items-center.justify-between
+    .flex.items-center.gap-1.text-sm
+      = link_to "Ortie", root_path, class: "font-bold text-rose-600 mr-2"
+      = link_to "New", root_path, class: nav_link_class(current_page?(root_path))
+      = link_to "Likes you", likes_you_path, class: nav_link_class(current_page?(likes_you_path))
+      = link_to matches_path, class: nav_link_class(current_page?(matches_path)) do
+        | Matches
+        = render "shared/nav_unread_badge", count: Current.user.unread_messages_count
+      = link_to "Liked", liked_path, class: nav_link_class(current_page?(liked_path))
+      = link_to "Passed", passed_path, class: nav_link_class(current_page?(passed_path))
+    .flex.items-center.gap-3.text-sm
+      = link_to "Photos", photos_path, class: nav_link_class(current_page?(photos_path))
+      = link_to "Settings", settings_path, class: nav_link_class(current_page?(settings_path))
+      - if Current.user&.donor
+        span.rounded-full.bg-amber-100.text-amber-800.px-2.py-0.5.text-xs.font-medium ♥ Donor
+      = button_to "Sign out", session_path, method: :delete, class: "text-gray-500 hover:text-gray-900"

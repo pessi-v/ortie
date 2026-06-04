@@ -1,0 +1,72 @@
+.mx-auto.max-w-lg.mt-10.mb-16.px-4
+  h1.text-2xl.font-semibold.mb-2 Set up your profile
+  p.text-gray-600.mb-6 This is what other people will see, and who you'd like to meet.
+
+  - errors = (@profile.errors.full_messages + @preference.errors.full_messages + Current.user.errors.full_messages)
+  - if errors.any?
+    .mb-4.rounded-lg.bg-rose-50.border.border-rose-200.p-3.text-sm.text-rose-700
+      ul.list-disc.list-inside
+        - errors.each do |msg|
+          li= msg
+
+  = form_with url: onboarding_path, method: :post, class: "space-y-8" do
+    section.space-y-4
+      h2.text-lg.font-medium About you
+      = fields_for :profile, @profile do |pf|
+        div
+          = pf.label :display_name, "Display name", class: "block text-sm font-medium mb-1"
+          = pf.text_field :display_name, required: true, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+        div
+          = pf.label :birthdate, class: "block text-sm font-medium mb-1"
+          = pf.date_field :birthdate, required: true, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+        div
+          = pf.label :gender, class: "block text-sm font-medium mb-1"
+          = pf.select :gender, Profile.genders.keys.map { |g| [g.humanize, g] }, { include_blank: "Select…" }, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+        div
+          = pf.label :self_described_gender, "Self-describe (optional)", class: "block text-sm font-medium mb-1"
+          = pf.text_field :self_described_gender, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+        div
+          = pf.label :bio, class: "block text-sm font-medium mb-1"
+          = pf.text_area :bio, rows: 3, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+      div
+        label.block.text-sm.font-medium.mb-1 Messaging preference
+        = select_tag "user[message_preference]", options_for_select(User.message_preferences.keys.map { |k| [k.humanize, k] }, Current.user.message_preference), class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+
+    section.space-y-4
+      h2.text-lg.font-medium Who you'd like to meet
+      = fields_for :user_preference, @preference do |xf|
+        div
+          span.block.text-sm.font-medium.mb-1 Genders
+          input type="hidden" name="user_preference[sought_genders][]" value=""
+          .flex.flex-wrap.gap-3
+            - Profile.genders.each do |name, value|
+              label.inline-flex.items-center.gap-2.text-sm
+                = check_box_tag "user_preference[sought_genders][]", value, @preference.sought_genders.include?(value)
+                = name.humanize
+        .grid.grid-cols-3.gap-3
+          div
+            = xf.label :age_min, "Min age", class: "block text-sm font-medium mb-1"
+            = xf.number_field :age_min, min: 18, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+          div
+            = xf.label :age_max, "Max age", class: "block text-sm font-medium mb-1"
+            = xf.number_field :age_max, min: 18, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+          div
+            = xf.label :max_distance_km, "Distance (km)", class: "block text-sm font-medium mb-1"
+            = xf.number_field :max_distance_km, min: 1, class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+
+    section.space-y-4
+      h2.text-lg.font-medium Location
+      p.text-sm.text-gray-500 Used to show you nearby people. Coordinates for now — geocoding comes later.
+      = fields_for :user, Current.user do |uf|
+        div
+          = uf.label :location_label, "City / label", class: "block text-sm font-medium mb-1"
+          = uf.text_field :location_label, placeholder: "Berlin", class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+        .grid.grid-cols-2.gap-3
+          div
+            = uf.label :latitude, class: "block text-sm font-medium mb-1"
+            = uf.number_field :latitude, step: "any", placeholder: "52.52", class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+          div
+            = uf.label :longitude, class: "block text-sm font-medium mb-1"
+            = uf.number_field :longitude, step: "any", placeholder: "13.405", class: "w-full rounded-lg border border-gray-300 px-3 py-2"
+
+    = submit_tag "Finish setup", class: "w-full rounded-lg bg-rose-600 text-white py-2.5 font-medium hover:bg-rose-700 cursor-pointer"

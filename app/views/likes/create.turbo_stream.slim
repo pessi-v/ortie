@@ -1,0 +1,6 @@
+= turbo_stream.remove "profile_#{@target.id}"
+= turbo_stream.update "flash" do
+  - if @result&.matched
+    = render "shared/flash", message: "It's a match with #{@target.profile.display_name}!", kind: :match
+  - else
+    = render "shared/flash", message: (@kind == "pass" ? "Passed." : "Liked."), kind: :info

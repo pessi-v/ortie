@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@layer components {
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gray-200);
+    background: #fff;
+    color: var(--color-gray-700);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .action-btn svg {
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+  }
+
+  .action-btn:active {
+    transform: scale(0.92);
+    transition: transform 0.08s ease;
+  }
+
+  .action-btn-like:hover  { color: var(--color-rose-600);  border-color: var(--color-rose-300); }
+  .action-btn-pass:hover  { color: var(--color-gray-900);  border-color: var(--color-gray-400); }
+  .action-btn-flag:hover  { color: var(--color-amber-600); border-color: var(--color-amber-300); }
+  .action-btn-write:hover { color: var(--color-sky-600);   border-color: var(--color-sky-300); }
+
+  /* Chat bubbles — alignment/color set by the messages Stimulus controller,
+     defined here so they don't depend on Tailwind scanning JS class strings. */
+  .bubble--mine   { margin-left: auto;  background: var(--color-rose-600);  color: #fff; }
+  .bubble--theirs { margin-right: auto; background: var(--color-gray-100); color: var(--color-gray-900); }
+
+  /* New-profiles swipe carousel: one slide per viewport, native snap swipe. */
+  .carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: flex;
+    justify-content: center;
+    padding-inline: 0.5rem;
+  }
+}

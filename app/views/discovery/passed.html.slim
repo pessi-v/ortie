@@ -1,0 +1,5 @@
+- content_for :title, "Passed"
+header.mb-6
+  h1.text-2xl.font-semibold Passed
+  p.text-gray-500 People you passed — un-pass to give them another look.
+= render "discovery/grid", profiles: @profiles, section: @section, empty_message: "You haven't passed on anyone."

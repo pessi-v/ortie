@@ -1,0 +1,16 @@
+{
+  "name": "ortie-nsfw",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "NSFW image classification sidecar for Ortie (nsfwjs + TensorFlow.js)",
+  "scripts": {
+    "start": "node server.js",
+    "fetch-model": "node bin/fetch_model.mjs"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "express": "^4.21.2",
+    "nsfwjs": "^4.3.0"
+  }
+}

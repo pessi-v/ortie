@@ -1,0 +1,5 @@
+- content_for :title, "Liked"
+header.mb-6
+  h1.text-2xl.font-semibold Liked
+  p.text-gray-500 People you've liked.
+= render "discovery/grid", profiles: @profiles, section: @section, empty_message: "You haven't liked anyone yet."

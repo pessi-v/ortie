@@ -1,0 +1,22 @@
+- content_for :title, "New profiles"
+= render "shared/no_photo_banner"
+header.mb-6
+  h1.text-2xl.font-semibold New profiles
+  p.text-gray-500 One at a time — swipe or use the arrows.
+
+- profiles = @profiles.to_a
+div data-controller="carousel"
+  .carousel-track data-carousel-target="track" hidden=profiles.empty?
+    - profiles.each do |user|
+      .carousel-slide id="profile_#{user.id}"
+        .w-full.max-w-sm
+          = render "discovery/profile_card", user: user, section: :new_profiles, card_id: nil
+
+  div data-carousel-target="empty" hidden=profiles.any?
+    = render "discovery/empty", message: "No new profiles right now — check back later."
+
+  .mt-5.flex.justify-center.gap-4 data-carousel-target="controls" hidden=profiles.empty?
+    button.w-12.h-12.rounded-full.border.border-gray-300.bg-white.text-xl.text-gray-600.hover:bg-gray-50 type="button" data-action="carousel#prev" aria-label="Previous profile"
+      | ‹
+    button.w-12.h-12.rounded-full.border.border-gray-300.bg-white.text-xl.text-gray-600.hover:bg-gray-50 type="button" data-action="carousel#next" aria-label="Next profile"
+      | ›

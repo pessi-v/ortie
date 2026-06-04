@@ -1,0 +1,5 @@
+= turbo_stream.append "photos" do
+  = render "photos/photo", photo: @photo
+= turbo_stream.remove "photos-empty"
+= turbo_stream.update "flash" do
+  = render "shared/flash", message: "Photo uploaded — checking it now.", kind: :info

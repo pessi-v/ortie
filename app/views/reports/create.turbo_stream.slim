@@ -1,0 +1,3 @@
+= turbo_stream.remove "profile_#{@target.id}"
+= turbo_stream.update "flash" do
+  = render "shared/flash", message: "Reported — thank you.", kind: :info

@@ -1,0 +1,20 @@
+- profile = user.profile
+- card_id = local_assigns.fetch(:card_id, "profile_#{user.id}")
+.bg-white.rounded-2xl.border.border-gray-200.shadow-sm.overflow-hidden.w-full id=card_id
+  .aspect-4/5.overflow-hidden
+    = avatar_for user, variant: :card, classes: "w-full h-full text-6xl"
+  .p-4
+    .flex.items-baseline.gap-2
+      h3.text-lg.font-semibold = profile.display_name
+      - if profile.age
+        span.text-gray-500 = profile.age
+    - if user.location_label.present?
+      p.text-sm.text-gray-500 = user.location_label
+    - if profile.bio.present?
+      p.mt-2.text-sm.text-gray-700.line-clamp-3 = profile.bio
+    - if (label = message_preference_label(user))
+      p.mt-2.text-xs.text-gray-400 = label
+    - if section == :likes_you && user.try(:intro_note).present?
+      .mt-3.rounded-lg.bg-sky-50.p-2.text-sm.text-sky-900
+        = "“#{user.intro_note}”"
+    = render "discovery/action_buttons", user: user, section: section

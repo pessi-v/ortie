@@ -1,0 +1,5 @@
+- content_for :title, "Likes you"
+header.mb-6
+  h1.text-2xl.font-semibold Likes you
+  p.text-gray-500 People who like you. Like back to match.
+= render "discovery/grid", profiles: @profiles, section: @section, empty_message: "No one's waiting on you right now."

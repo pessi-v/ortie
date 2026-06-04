@@ -1,0 +1,4 @@
+- if Current.user.primary_photo.nil?
+  .mb-5.rounded-xl.bg-amber-50.border.border-amber-200.p-4.flex.items-center.justify-between.gap-3
+    p.text-sm.text-amber-800 Add a photo so others can see you — and so you show up in discovery.
+    = link_to "Add photos", photos_path, class: "shrink-0 rounded-lg bg-amber-600 text-white px-3 py-1.5 text-sm font-medium hover:bg-amber-700"

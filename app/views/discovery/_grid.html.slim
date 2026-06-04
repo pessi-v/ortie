@@ -1,0 +1,6 @@
+- profiles = profiles.to_a
+- if profiles.empty?
+  = render "discovery/empty", message: empty_message
+- else
+  .grid.grid-cols-1.gap-5.sm:grid-cols-2.lg:grid-cols-3
+    = render partial: "discovery/profile_card", collection: profiles, as: :user, locals: { section: section }

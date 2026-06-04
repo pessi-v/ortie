@@ -1,0 +1,19 @@
+- content_for :title, @other.profile.display_name
+= turbo_stream_from @conversation
+
+div class="flex flex-col h-[calc(100vh-7rem)] max-w-2xl mx-auto"
+  header.flex.items-center.gap-3.pb-3.border-b.border-gray-200
+    = link_to matches_path, class: "text-gray-400 hover:text-gray-700 text-xl" do
+      | ‹
+    .w-10.h-10.rounded-full.overflow-hidden
+      = avatar_for @other, variant: :thumb, classes: "w-full h-full"
+    div
+      h1.font-semibold.leading-tight= @other.profile.display_name
+      - if (label = message_preference_label(@other))
+        p.text-xs.text-gray-400= label
+
+  #messages.flex-1.overflow-y-auto.py-4.space-y-1 data-controller="messages" data-messages-user-id-value=Current.user.id
+    = render partial: "messages/message", collection: @messages, as: :message
+
+  .pt-3.border-t.border-gray-200
+    = render "messages/form", conversation: @conversation, message: @message

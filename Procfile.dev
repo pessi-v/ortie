@@ -1,0 +1,3 @@
+web: bin/rails server
+css: bin/rails tailwindcss:watch
+nsfw: cd nsfw_service && PORT=3001 mise exec -- npm start

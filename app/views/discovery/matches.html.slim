@@ -1,0 +1,27 @@
+- content_for :title, "Matches"
+header.mb-6
+  h1.text-2xl.font-semibold Matches
+  p.text-gray-500 You liked each other — say hello.
+
+- matches = @matches.to_a
+- if matches.empty?
+  = render "discovery/empty", message: "No matches yet — like someone who likes you back."
+- else
+  .divide-y.divide-gray-100.bg-white.rounded-2xl.border.border-gray-200.overflow-hidden
+    - matches.each do |match|
+      - other = match.other_user(Current.user)
+      - participant = match.conversation.conversation_participants.find { |p| p.user_id == Current.user.id }
+      - last_message = match.conversation.messages.max_by(&:created_at)
+      = link_to conversation_path(match.conversation), class: "flex items-center gap-3 p-4 hover:bg-gray-50" do
+        .w-12.h-12.shrink-0.rounded-full.overflow-hidden
+          = avatar_for other, variant: :thumb, classes: "w-full h-full text-lg"
+        .min-w-0.flex-1
+          .flex.items-baseline.justify-between.gap-2
+            span.font-medium.truncate= other.profile.display_name
+            - if last_message
+              span.text-xs.text-gray-400.shrink-0= time_ago_in_words(last_message.created_at) + " ago"
+          p.text-sm.text-gray-500.truncate
+            = last_message&.body || "No messages yet"
+        - if participant && participant.unread_count.positive?
+          span.shrink-0.inline-flex.items-center.justify-center.rounded-full.bg-rose-600.text-white.text-xs.font-medium.px-1.5.h-5 style="min-width:1.25rem"
+            = participant.unread_count
