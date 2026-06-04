@@ -52,3 +52,6 @@
 
 # Ignore the NSFW sidecar (built/deployed as its own image/accessory).
 /nsfw_service/
+
+# Ignore cloudflared tunnel config (deployed to the host, not the app image).
+/cloudflared/

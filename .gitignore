@@ -39,3 +39,4 @@
 config/deploy.yml
 # Kamal secrets contain raw credentials — never commit.
 .kamal/secrets
+/cloudflared
