@@ -8,9 +8,17 @@ class ApplicationController < ActionController::Base
 
   before_action :require_onboarding
 
-  helper_method :nsfw_available?
+  helper_method :nsfw_available?, :hotwire_native_app?
 
   private
+
+  # True when the request originates from inside a Hotwire Native (Android/iOS)
+  # shell. The native libraries append "Hotwire Native …; Turbo Native …" to the
+  # WebView user agent. Lets views drop web-only chrome the native app supplies
+  # itself. See android/README.md.
+  def hotwire_native_app?
+    request.user_agent.to_s.match?(/Hotwire Native|Turbo Native/)
+  end
 
   # Cached per request. Drives the "paused" gating on sign-ups and photo uploads
   # when the NSFW moderation sidecar is down.

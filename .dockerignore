@@ -55,3 +55,7 @@
 
 # Ignore cloudflared tunnel config (deployed to the host, not the app image).
 /cloudflared/
+
+# Ignore the Hotwire Native Android app (built with Gradle/Android Studio, not
+# part of the Rails image).
+/android/

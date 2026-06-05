@@ -29,6 +29,12 @@ Rails.application.routes.draw do
   post "profiles/:id/unpass" => "likes#destroy",  as: :unpass_profile
   post "profiles/:id/flag"   => "reports#create", as: :flag_profile
 
+  # Hotwire Native path configuration — the remote source of truth the mobile
+  # apps fetch at launch (each app also bundles a local copy as a fallback).
+  # Versioned so a breaking change can ship android_v2 without stranding old
+  # installs. See android/README.md.
+  get "configurations/android_v1" => "configurations#android", defaults: { format: :json }
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   get "up" => "rails/health#show", as: :rails_health_check
 

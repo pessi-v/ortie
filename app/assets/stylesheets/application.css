@@ -8,3 +8,9 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Hide web elements that have been replaced by a native bridge component. */
+[data-bridge-components~="button"]
+[data-controller~="button"] {
+  display: none;
+}
