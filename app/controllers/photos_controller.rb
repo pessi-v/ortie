@@ -1,18 +1,12 @@
 class PhotosController < ApplicationController
-  def index
-    @photos = Current.user.photos.order(:position)
-    @photo = Photo.new
-    @nsfw_down = !nsfw_available?
-  end
-
   def create
     unless nsfw_available?
-      redirect_to photos_path, alert: "Photo uploads are paused right now — please try again later."
+      redirect_to settings_path(anchor: "photos-section"), alert: "Photo uploads are paused right now — please try again later."
       return
     end
 
     if Current.user.photos.count >= Photo::MAX_PER_USER
-      redirect_to photos_path, alert: "You already have the maximum of #{Photo::MAX_PER_USER} photos."
+      redirect_to settings_path(anchor: "photos-section"), alert: "You already have the maximum of #{Photo::MAX_PER_USER} photos."
       return
     end
 
@@ -22,10 +16,10 @@ class PhotosController < ApplicationController
       ProcessPhotoJob.perform_later(@photo)
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to photos_path, notice: "Photo uploaded — checking it now." }
+        format.html { redirect_to settings_path(anchor: "photos-section") }
       end
     else
-      redirect_to photos_path, alert: @photo.errors.full_messages.to_sentence
+      redirect_to settings_path(anchor: "photos-section"), alert: @photo.errors.full_messages.to_sentence
     end
   end
 
@@ -33,7 +27,7 @@ class PhotosController < ApplicationController
     photo = Current.user.photos.find(params[:id])
     photo.destroy
     reindex_positions
-    redirect_to photos_path, notice: "Photo removed."
+    redirect_to settings_path(anchor: "photos-section")
   end
 
   def make_primary
@@ -45,7 +39,7 @@ class PhotosController < ApplicationController
       ([photo] + others).each_with_index { |p, i| p.update_columns(position: i + 1) }
     end
 
-    redirect_to photos_path, notice: "Primary photo updated."
+    redirect_to settings_path(anchor: "photos-section"), notice: "Primary photo updated."
   end
 
   private

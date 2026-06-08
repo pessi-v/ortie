@@ -17,9 +17,21 @@ class ProcessPhotoJob < ApplicationJob
     status = classify(photo)
     photo.update!(moderation_status: status)
 
-    return if photo.rejected?
+    unless photo.rejected?
+      Photo::PHOTO_VARIANTS.each_key { |name| photo.image.variant(name).processed }
+    end
 
-    Photo::PHOTO_VARIANTS.each_key { |name| photo.image.variant(name).processed }
+    photo.broadcast_replace_to "photo_#{photo.id}",
+      target: "photo_#{photo.id}_status",
+      partial: "photos/photo_status",
+      locals: { photo: photo }
+
+    if photo.rejected?
+      photo.broadcast_replace_to "photo_#{photo.id}",
+        target: "photo_#{photo.id}_image",
+        partial: "photos/photo_image",
+        locals: { photo: photo }
+    end
   end
 
   private

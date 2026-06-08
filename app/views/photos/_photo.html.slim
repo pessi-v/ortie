@@ -1,14 +1,10 @@
 .relative.rounded-xl.overflow-hidden.border.border-gray-200.bg-gray-50 id="photo_#{photo.id}"
-  .aspect-4/5.overflow-hidden
-    - if photo.rejected?
-      .w-full.h-full.flex.items-center.justify-center.text-sm.text-rose-600.bg-rose-50 Rejected
-    - elsif photo.image.attached?
-      = image_tag photo.image.variant(:card), class: "w-full h-full object-cover", loading: "lazy"
+  = turbo_stream_from "photo_#{photo.id}"
+  = render "photos/photo_image", photo: photo
   .absolute.top-2.left-2.flex.gap-1
     - if photo.position == 1
       span.rounded-full.bg-rose-600.text-white.text-xs.px-2.py-0.5 Primary
-    span.rounded-full.text-xs.px-2.py-0.5 class=photo_status_pill_class(photo)
-      = photo.moderation_status.humanize
+    = render "photos/photo_status", photo: photo
   .absolute.bottom-2.inset-x-2.flex.gap-2.justify-between
     - unless photo.position == 1
       = button_to "Make primary", make_primary_photo_path(photo), method: :patch, class: "rounded-md bg-white/90 text-gray-800 text-xs px-2 py-1 hover:bg-white"

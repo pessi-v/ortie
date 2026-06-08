@@ -62,6 +62,8 @@ class SettingsController < ApplicationController
     @user = Current.user
     @profile = @user.profile
     @preference = @user.user_preference
+    @photos = @user.photos.order(:position)
+    @nsfw_down = !nsfw_available?
   end
 
   def profile_params

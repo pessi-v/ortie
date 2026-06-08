@@ -1,1 +1,28 @@
 # intentionally empty — tests build their own data
+# == Schema Information
+#
+# Table name: reports
+#
+#  id          :bigint           not null, primary key
+#  note        :text
+#  reason      :integer          not null
+#  status      :integer          default("pending"), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  photo_id    :bigint
+#  reported_id :bigint           not null
+#  reporter_id :bigint           not null
+#
+# Indexes
+#
+#  index_reports_on_photo_id     (photo_id)
+#  index_reports_on_reported_id  (reported_id)
+#  index_reports_on_reporter_id  (reporter_id)
+#  index_reports_pending         (status) WHERE (status = 0)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (photo_id => photos.id) ON DELETE => nullify
+#  fk_rails_...  (reported_id => users.id) ON DELETE => cascade
+#  fk_rails_...  (reporter_id => users.id) ON DELETE => cascade
+#

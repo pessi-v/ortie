@@ -1,8 +1,6 @@
 - content_for :title, "New profiles"
 = render "shared/no_photo_banner"
-header.mb-6
-  h1.text-2xl.font-semibold New profiles
-  p.text-gray-500 One at a time — swipe or use the arrows.
+
 
 - profiles = @profiles.to_a
 div data-controller="carousel"

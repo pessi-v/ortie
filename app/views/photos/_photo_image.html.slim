@@ -1,0 +1,5 @@
+.aspect-4/5.overflow-hidden id="photo_#{photo.id}_image"
+  - if photo.rejected?
+    .w-full.h-full.flex.items-center.justify-center.text-sm.text-rose-600.bg-rose-50 Rejected
+  - elsif photo.image.attached?
+    = image_tag photo.image.variant(:card), class: "w-full h-full object-cover", loading: "lazy"

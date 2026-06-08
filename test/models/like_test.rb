@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: likes
+#
+#  id         :bigint           not null, primary key
+#  intro_note :text
+#  kind       :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  liked_id   :bigint           not null
+#  liker_id   :bigint           not null
+#
+# Indexes
+#
+#  index_likes_on_liked_id_and_kind      (liked_id,kind)
+#  index_likes_on_liker_id_and_kind      (liker_id,kind)
+#  index_likes_on_liker_id_and_liked_id  (liker_id,liked_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (liked_id => users.id) ON DELETE => cascade
+#  fk_rails_...  (liker_id => users.id) ON DELETE => cascade
+#
 require "test_helper"
 
 class LikeTest < ActiveSupport::TestCase

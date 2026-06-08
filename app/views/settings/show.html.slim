@@ -3,10 +3,30 @@
   header
     h1.text-2xl.font-semibold Settings
     nav.mt-2.flex.flex-wrap.gap-3.text-sm.text-rose-600
+      = link_to "Photos", "#photos-section", class: "hover:underline"
       = link_to "Profile", "#profile", class: "hover:underline"
       = link_to "Preferences", "#preferences", class: "hover:underline"
       = link_to "Location", "#location", class: "hover:underline"
       = link_to "Account", "#account", class: "hover:underline"
+      = link_to "Sign out", "#sign-out", class: "hover:underline"
+
+  / ---------- Photos ----------
+  section#photos-section.bg-white.rounded-2xl.border.border-gray-200.p-5
+    h2.text-lg.font-medium.mb-1 Photos
+    p.text-sm.text-gray-500.mb-4 Up to #{Photo::MAX_PER_USER}. The first one is your primary photo. New uploads are checked before they go live.
+    - if @nsfw_down
+      .mb-4.rounded-lg.bg-amber-50.border.border-amber-200.p-3.text-sm.text-amber-800
+        | Photo uploads are paused right now — please try again later.
+    - elsif @photos.size < Photo::MAX_PER_USER
+      = form_with url: photos_path, method: :post, scope: :photo, class: "mb-4 flex items-center gap-3" do |form|
+        = form.file_field :image, accept: "image/jpeg,image/png,image/heic,image/webp", required: true, class: "text-sm"
+        = form.submit "Upload", class: "rounded-lg bg-rose-600 text-white px-4 py-2 text-sm font-medium hover:bg-rose-700 cursor-pointer"
+    - else
+      p.mb-4.text-sm.text-gray-500 You've reached the maximum of #{Photo::MAX_PER_USER} photos. Remove one to add another.
+    #photos.grid.grid-cols-2.sm:grid-cols-3.gap-4
+      = render partial: "photos/photo", collection: @photos, as: :photo
+    - if @photos.empty?
+      #photos-empty.text-center.text-gray-500.py-8 No photos yet — upload your first above.
 
   / ---------- Profile & messaging ----------
   section#profile.bg-white.rounded-2xl.border.border-gray-200.p-5
@@ -100,9 +120,15 @@
       = submit_tag "Save account", class: button_class
 
     .mt-6.pt-5.border-t.border-gray-100
+
       - if @user.active?
         p.text-sm.text-gray-600.mb-2 Deactivating hides you from discovery. You can reactivate anytime.
         = button_to "Deactivate account", settings_active_path, method: :patch, params: { active: false }, class: "rounded-lg border border-rose-300 text-rose-700 px-4 py-2 text-sm font-medium hover:bg-rose-50", form: { data: { turbo_confirm: "Deactivate your account? You'll be hidden from discovery." } }
       - else
         p.text-sm.text-amber-700.mb-2 Your account is deactivated — you're hidden from discovery.
         = button_to "Reactivate account", settings_active_path, method: :patch, params: { active: true }, class: "rounded-lg bg-rose-600 text-white px-4 py-2 text-sm font-medium hover:bg-rose-700"
+
+  / ---------- Sign out ----------
+  section#sign-out.bg-white.rounded-2xl.border.border-gray-200.p-5
+    h2.text-lg.font-medium.mb-4 Sign out
+    = button_to "Sign out", session_path, method: :delete, class: button_class

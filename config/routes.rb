@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :messages, only: :create
   end
 
-  resources :photos, only: %i[index create destroy]
+  resources :photos, only: %i[create destroy]
   patch "photos/:id/make_primary" => "photos#make_primary", as: :make_primary_photo
 
   get   "settings"             => "settings#show",              as: :settings
